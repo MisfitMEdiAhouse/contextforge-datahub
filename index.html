@@ -13,7 +13,7 @@
   <div class="badge">DataHub Agent Hackathon 2026</div>
 </header>
 <main>
-<section class="hero">
+<section class="hero" id="hero">
   <div>
     <p class="eyebrow">METADATA-AWARE CODE GENERATION</p>
     <h1>Generate data code that knows what it can break.</h1>
@@ -26,8 +26,23 @@
     <div><strong>1</strong><span>approval gate</span></div>
   </div>
 </section>
+
+<section class="guide-panel" id="guidePanel" aria-live="polite">
+  <div class="guide-head">
+    <div><span class="guide-dot"></span><strong>ContextForge Guide Agent</strong><small>Context-aware demo walkthrough</small></div>
+    <span id="guideState" class="status live">READY</span>
+  </div>
+  <p id="guideText">Want the product to explain itself? Start the guided demo and I’ll walk through the request, DataHub evidence, generated artifacts, risk gate and final run report.</p>
+  <div class="guide-actions">
+    <button id="guideStart" class="primary compact">Start guided demo</button>
+    <button id="guideNext" class="secondary" disabled>Next</button>
+    <button id="guideVoice" class="secondary" aria-pressed="true">Voice: on</button>
+  </div>
+  <small class="guide-note">Guide narration is deterministic and state-aware for this hackathon demo; it does not call an external LLM.</small>
+</section>
+
 <section class="workspace">
-  <div class="panel request-panel">
+  <div class="panel request-panel" id="requestPanel">
     <div class="panel-head"><h2>1. Change request</h2><span class="status live">DEMO DATAHUB GRAPH</span></div>
     <label for="request">Describe a data change</label>
     <textarea id="request" rows="4">Rename customers.email to primary_email while preserving downstream models and PII governance.</textarea>
@@ -38,12 +53,12 @@
     </div>
     <button id="generate" class="primary">Analyze DataHub context & generate patch</button>
   </div>
-  <div class="panel context-panel">
+  <div class="panel context-panel" id="contextPanel">
     <div class="panel-head"><h2>2. Context used</h2><span class="status">MCP-READY</span></div>
     <div id="contextCards" class="context-cards"></div>
   </div>
 </section>
-<section class="panel result-panel">
+<section class="panel result-panel" id="resultPanel">
   <div class="panel-head"><h2>3. Impact-aware output</h2><span id="riskBadge" class="risk">WAITING</span></div>
   <div class="tabs">
     <button class="tab active" data-tab="sql">dbt model</button>
@@ -56,6 +71,23 @@
     <button id="approve" disabled>Approve artifact</button>
   </div>
 </section>
+
+<section class="panel report-panel" id="reportPanel" hidden>
+  <div class="panel-head"><div><p class="eyebrow">RUN COMPLETE</p><h2>4. ContextForge Run Report</h2></div><span class="status live">APPROVED</span></div>
+  <div class="report-summary">
+    <div><small>REQUESTED CHANGE</small><strong id="reportRequest"></strong></div>
+    <div><small>IMPACT</small><strong id="reportImpact"></strong></div>
+    <div><small>FINAL STATUS</small><strong>APPROVED — READY FOR PR</strong></div>
+  </div>
+  <div class="report-grid">
+    <article><h3>DataHub evidence analyzed</h3><ul id="reportEvidence"></ul></article>
+    <article><h3>Artifacts generated</h3><ul><li>✓ dbt compatibility migration</li><li>✓ schema tests</li><li>✓ evidence-linked PR summary</li></ul></article>
+    <article><h3>Governance decision</h3><p id="reportDecision"></p></article>
+    <article><h3>Write-back status</h3><p>Planned after approval. This clean-room demo does not execute a live DataHub write-back or merge a pull request.</p></article>
+  </div>
+  <div class="report-actions"><button id="downloadReport" class="primary compact">Download run report</button></div>
+</section>
+
 <section class="architecture">
   <h2>Why this is different</h2>
   <div class="grid3">
