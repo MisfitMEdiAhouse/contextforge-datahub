@@ -1,0 +1,36 @@
+{
+  "entities": [
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,commerce.public.customers,PROD)",
+      "name": "customers",
+      "platform": "Snowflake",
+      "owner": "data-platform",
+      "tags": ["PII", "Tier1"],
+      "fields": [
+        {"name":"customer_id","type":"VARCHAR","nullable":false},
+        {"name":"email","type":"VARCHAR","nullable":false,"tags":["PII"]},
+        {"name":"customer_tier","type":"VARCHAR","nullable":true},
+        {"name":"legacy_segment","type":"VARCHAR","nullable":true,"deprecated":true}
+      ],
+      "queries": [
+        "select customer_id, email from commerce.public.customers where email is not null",
+        "select customer_tier, count(*) from commerce.public.customers group by 1"
+      ],
+      "downstream": ["stg_customers","dim_customers","marketing_audience"]
+    },
+    {
+      "urn": "urn:li:dataset:(urn:li:dataPlatform:snowflake,commerce.public.orders,PROD)",
+      "name": "orders",
+      "platform": "Snowflake",
+      "owner": "finance-data",
+      "tags": ["Tier1"],
+      "fields": [
+        {"name":"order_id","type":"VARCHAR","nullable":false},
+        {"name":"customer_id","type":"VARCHAR","nullable":false},
+        {"name":"total_amount","type":"BIGINT","nullable":false,"description":"Amount in integer cents"}
+      ],
+      "queries": ["select sum(total_amount)/100.0 as revenue from commerce.public.orders"],
+      "downstream": ["fct_orders","revenue_daily","executive_revenue_dashboard"]
+    }
+  ]
+}
