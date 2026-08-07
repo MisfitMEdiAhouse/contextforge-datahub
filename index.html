@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ContextForge — DataHub-aware Code Generation</title>
+<meta name="description" content="Metadata-aware code generation grounded in DataHub schema, lineage, ownership, governance and usage context." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="mark">CF</span><div><strong>ContextForge</strong><small>by Misfit Mediahouse</small></div></div>
+  <div class="badge">DataHub Agent Hackathon 2026</div>
+</header>
+<main>
+<section class="hero">
+  <div>
+    <p class="eyebrow">METADATA-AWARE CODE GENERATION</p>
+    <h1>Generate data code that knows what it can break.</h1>
+    <p class="lede">ContextForge grounds code generation in DataHub schema, lineage, ownership, governance signals and observed query patterns before producing merge-ready artifacts.</p>
+    <div class="flow"><span>DataHub context</span><b>→</b><span>impact analysis</span><b>→</b><span>code + tests</span><b>→</b><span>human gate</span></div>
+  </div>
+  <div class="scorecard">
+    <div><strong>5</strong><span>context signals</span></div>
+    <div><strong>3</strong><span>generated artifacts</span></div>
+    <div><strong>1</strong><span>approval gate</span></div>
+  </div>
+</section>
+<section class="workspace">
+  <div class="panel request-panel">
+    <div class="panel-head"><h2>1. Change request</h2><span class="status live">DEMO DATAHUB GRAPH</span></div>
+    <label for="request">Describe a data change</label>
+    <textarea id="request" rows="4">Rename customers.email to primary_email while preserving downstream models and PII governance.</textarea>
+    <div class="presets">
+      <button data-preset="Rename customers.email to primary_email while preserving downstream models and PII governance.">PII column rename</button>
+      <button data-preset="Change orders.total_amount from integer cents to decimal dollars and update downstream revenue logic.">Type migration</button>
+      <button data-preset="Deprecate customers.legacy_segment and migrate downstream analytics to customer_tier.">Deprecation</button>
+    </div>
+    <button id="generate" class="primary">Analyze DataHub context & generate patch</button>
+  </div>
+  <div class="panel context-panel">
+    <div class="panel-head"><h2>2. Context used</h2><span class="status">MCP-READY</span></div>
+    <div id="contextCards" class="context-cards"></div>
+  </div>
+</section>
+<section class="panel result-panel">
+  <div class="panel-head"><h2>3. Impact-aware output</h2><span id="riskBadge" class="risk">WAITING</span></div>
+  <div class="tabs">
+    <button class="tab active" data-tab="sql">dbt model</button>
+    <button class="tab" data-tab="yaml">schema tests</button>
+    <button class="tab" data-tab="pr">PR summary</button>
+  </div>
+  <pre id="output"><code>Run an analysis to generate artifacts.</code></pre>
+  <div class="approval">
+    <div><strong>Human approval gate</strong><p>ContextForge never auto-merges generated data code. Review the evidence and artifact first.</p></div>
+    <button id="approve" disabled>Approve artifact</button>
+  </div>
+</section>
+<section class="architecture">
+  <h2>Why this is different</h2>
+  <div class="grid3">
+    <article><h3>Context before code</h3><p>Reads schema, lineage, ownership, tags and query patterns before generation instead of guessing from a prompt.</p></article>
+    <article><h3>Evidence-linked output</h3><p>Every generated change includes the DataHub facts that justified it and the downstream assets it may affect.</p></article>
+    <article><h3>Governed execution</h3><p>Risky changes stop at a human gate. Approved decisions can be written back to DataHub as shared knowledge.</p></article>
+  </div>
+</section>
+</main>
+<footer>Apache-2.0 hackathon project • Clean-room implementation • No proprietary GHOSBC source included</footer>
+<script src="app.js"></script>
+</body>
+</html>
