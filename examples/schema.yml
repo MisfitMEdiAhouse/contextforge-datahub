@@ -1,0 +1,10 @@
+version: 2
+models:
+  - name: stg_customers
+    columns:
+      - name: primary_email
+        meta:
+          datahub_tags: [PII]
+        tests: [not_null]
+      - name: email
+        description: "DEPRECATED compatibility alias"
