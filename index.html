@@ -1,103 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ContextForge — DataHub-aware Code Generation</title>
-<meta name="description" content="Metadata-aware code generation grounded in DataHub schema, lineage, ownership, governance and usage context." />
-<link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-<header class="topbar">
-  <div class="brand"><span class="mark">CF</span><div><strong>ContextForge</strong><small>by Misfit Mediahouse</small></div></div>
-  <div class="badge">DataHub Agent Hackathon 2026</div>
-</header>
-<main>
-<section class="hero" id="hero">
-  <div>
-    <p class="eyebrow">METADATA-AWARE CODE GENERATION</p>
-    <h1>Generate data code that knows what it can break.</h1>
-    <p class="lede">ContextForge grounds code generation in DataHub schema, lineage, ownership, governance signals and observed query patterns before producing merge-ready artifacts.</p>
-    <div class="flow"><span>DataHub context</span><b>→</b><span>impact analysis</span><b>→</b><span>code + tests</span><b>→</b><span>human gate</span></div>
-  </div>
-  <div class="scorecard">
-    <div><strong>5</strong><span>context signals</span></div>
-    <div><strong>3</strong><span>generated artifacts</span></div>
-    <div><strong>1</strong><span>approval gate</span></div>
-  </div>
-  <button id="guideStart" class="primary hero-cta">Start guided demo</button>
-</section>
-
-<section class="workspace">
-  <div class="panel request-panel" id="requestPanel">
-    <div class="panel-head"><h2>1. Change request</h2><span class="status live">DEMO DATAHUB GRAPH</span></div>
-    <label for="request">Describe a data change</label>
-    <textarea id="request" rows="4">Rename customers.email to primary_email while preserving downstream models and PII governance.</textarea>
-    <div class="presets">
-      <button data-preset="Rename customers.email to primary_email while preserving downstream models and PII governance.">PII column rename</button>
-      <button data-preset="Change orders.total_amount from integer cents to decimal dollars and update downstream revenue logic.">Type migration</button>
-      <button data-preset="Deprecate customers.legacy_segment and migrate downstream analytics to customer_tier.">Deprecation</button>
-    </div>
-    <button id="generate" class="primary">Analyze DataHub context & generate patch</button>
-  </div>
-  <div class="panel context-panel" id="contextPanel">
-    <div class="panel-head"><h2>2. Context used</h2><span class="status">MCP-READY</span></div>
-    <div id="contextCards" class="context-cards"></div>
-  </div>
-</section>
-<section class="panel result-panel" id="resultPanel">
-  <div class="panel-head"><h2>3. Impact-aware output</h2><span id="riskBadge" class="risk">WAITING</span></div>
-  <div class="tabs">
-    <button class="tab active" data-tab="sql">dbt model</button>
-    <button class="tab" data-tab="yaml">schema tests</button>
-    <button class="tab" data-tab="pr">PR summary</button>
-  </div>
-  <pre id="output"><code>Run an analysis to generate artifacts.</code></pre>
-  <div class="approval">
-    <div><strong>Human approval gate</strong><p>ContextForge never auto-merges generated data code. Review the evidence and artifact first.</p></div>
-    <button id="approve" disabled>Approve artifact</button>
-  </div>
-</section>
-
-<section class="panel report-panel" id="reportPanel" hidden>
-  <div class="panel-head"><div><p class="eyebrow">RUN COMPLETE</p><h2>4. ContextForge Run Report</h2></div><span class="status live">APPROVED</span></div>
-  <div class="report-summary">
-    <div><small>REQUESTED CHANGE</small><strong id="reportRequest"></strong></div>
-    <div><small>IMPACT</small><strong id="reportImpact"></strong></div>
-    <div><small>FINAL STATUS</small><strong>APPROVED — READY FOR PR</strong></div>
-  </div>
-  <div class="report-grid">
-    <article><h3>DataHub evidence analyzed</h3><ul id="reportEvidence"></ul></article>
-    <article><h3>Artifacts generated</h3><ul><li>✓ dbt compatibility migration</li><li>✓ schema tests</li><li>✓ evidence-linked PR summary</li></ul></article>
-    <article><h3>Governance decision</h3><p id="reportDecision"></p></article>
-    <article><h3>Write-back status</h3><p>Planned after approval. This clean-room demo does not execute a live DataHub write-back or merge a pull request.</p></article>
-  </div>
-  <div class="report-actions"><button id="downloadReport" class="primary compact">Download run report</button></div>
-</section>
-
-<section class="architecture" id="architecture">
-  <h2>Why this is different</h2>
-  <div class="grid3">
-    <article><h3>Context before code</h3><p>Reads schema, lineage, ownership, tags and query patterns before generation instead of guessing from a prompt.</p></article>
-    <article><h3>Evidence-linked output</h3><p>Every generated change includes the DataHub facts that justified it and the downstream assets it may affect.</p></article>
-    <article><h3>Governed execution</h3><p>Risky changes stop at a human gate. Approved decisions can be written back to DataHub as shared knowledge.</p></article>
-  </div>
-</section>
-</main>
-<footer>Apache-2.0 hackathon project • Clean-room implementation • No proprietary GHOSBC source included</footer>
-
-<div class="guide-dock" id="guideDock" hidden aria-live="polite">
-  <div class="guide-copy">
-    <div class="guide-meta"><span class="guide-dot"></span><strong>Guide Agent</strong><span id="guideStepLabel">Step 1 of 6</span></div>
-    <p id="guideText">Ready.</p>
-  </div>
-  <div class="guide-controls">
-    <button id="guideBack" class="secondary">Back</button>
-    <button id="guideNext" class="primary compact">Next</button>
-    <button id="guideVoice" class="icon-btn" aria-pressed="false" title="Toggle voice">🔇</button>
-    <button id="guideClose" class="icon-btn" title="Close guide">×</button>
-  </div>
-</div>
-<script src="app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>ContextForge — DataHub-aware Code Generation</title><meta name="description" content="Metadata-aware code generation grounded in DataHub schema, lineage, ownership, governance and usage context."/><link rel="stylesheet" href="styles.css"/></head><body>
+<header class="topbar"><div class="brand"><span class="mark">CF</span><div><strong>ContextForge</strong><small>by Misfit Mediahouse</small></div></div><div class="badge">DataHub Agent Hackathon 2026</div></header><main>
+<section class="hero" id="hero"><div><p class="eyebrow">METADATA-AWARE CODE GENERATION</p><h1>Generate data code that knows what it can break.</h1><p class="lede">ContextForge grounds code generation in DataHub schema, lineage, ownership, governance signals and observed query patterns before producing merge-ready artifacts.</p><div class="flow"><span>DataHub context</span><b>→</b><span>impact policy</span><b>→</b><span>code + tests</span><b>→</b><span>human gate</span><b>→</b><span>context memory</span></div></div><div class="scorecard"><div><strong>5</strong><span>context signals</span></div><div><strong>3</strong><span>generated artifacts</span></div><div><strong>1</strong><span>approval boundary</span></div></div><button id="guideStart" class="primary hero-cta">Start judge-ready guided demo</button></section>
+<section class="pain-strip" id="painStrip"><div><small>PROMPT-ONLY AGENT</small><strong>Generate → deploy → discover breakage</strong></div><span>VS</span><div><small>CONTEXTFORGE</small><strong>Understand → reason → generate → govern → remember</strong></div></section>
+<section class="workspace"><div class="panel request-panel" id="requestPanel"><div class="panel-head"><h2>1. Change request</h2><span class="status live">DEMO DATAHUB GRAPH</span></div><label for="request">Describe a data change</label><textarea id="request" rows="4">Rename customers.email to primary_email while preserving downstream models and PII governance.</textarea><div class="presets"><button data-preset="Rename customers.email to primary_email while preserving downstream models and PII governance.">PII column rename</button><button data-preset="Change orders.total_amount from integer cents to decimal dollars and update downstream revenue logic.">Type migration</button><button data-preset="Deprecate customers.legacy_segment and migrate downstream analytics to customer_tier.">Deprecation</button></div><button id="generate" class="primary">Analyze DataHub context & generate patch</button></div><div class="panel context-panel" id="contextPanel"><div class="panel-head"><h2>2. Context used</h2><span class="status">MCP-READY</span></div><div id="contextCards" class="context-cards"></div></div></section>
+<section class="panel decision-panel" id="decisionPanel"><div class="panel-head"><div><p class="eyebrow">DECISION TRACE</p><h2>3. Evidence → impact → policy → action</h2></div><span id="gateBadge" class="risk">WAITING</span></div><div id="decisionTrace" class="decision-grid"><article><small>EVIDENCE</small><strong>Waiting for DataHub context</strong></article><article><small>IMPACT</small><strong>Not classified</strong></article><article><small>POLICY</small><strong>No policy selected</strong></article><article><small>SAFETY GATE</small><strong>No action authorized</strong></article></div><p class="truth-note">This is an auditable decision summary, not hidden model chain-of-thought.</p></section>
+<section class="panel result-panel" id="resultPanel"><div class="panel-head"><h2>4. Impact-aware output</h2><span id="riskBadge" class="risk">WAITING</span></div><div class="tabs"><button class="tab active" data-tab="sql">dbt model</button><button class="tab" data-tab="yaml">schema tests</button><button class="tab" data-tab="pr">PR summary</button></div><pre id="output"><code>Run an analysis to generate artifacts.</code></pre><div class="approval"><div><strong>Human approval gate</strong><p>High-impact changes are generated for review, never silently merged.</p></div><button id="approve" disabled>Approve artifact</button></div></section>
+<section class="panel report-panel" id="reportPanel" hidden><div class="panel-head"><div><p class="eyebrow">RUN COMPLETE</p><h2>5. ContextForge Run Report</h2></div><span class="status live">APPROVED</span></div><div class="report-summary"><div><small>REQUESTED CHANGE</small><strong id="reportRequest"></strong></div><div><small>IMPACT</small><strong id="reportImpact"></strong></div><div><small>FINAL STATUS</small><strong>APPROVED — READY FOR PR</strong></div></div><div class="report-grid"><article><h3>DataHub evidence analyzed</h3><ul id="reportEvidence"></ul></article><article><h3>Artifacts generated</h3><ul><li>✓ dbt compatibility migration</li><li>✓ schema tests</li><li>✓ evidence-linked PR summary</li></ul></article><article><h3>Governance decision</h3><p id="reportDecision"></p></article><article><h3>Context memory</h3><p id="memoryStatus">Approved decision retained in browser demo memory. Live DataHub write-back remains an explicit integration action, not a fake browser write.</p></article></div><div class="report-actions"><button id="downloadReport" class="primary compact">Download run report</button><button id="followup" class="secondary">Run follow-up using memory</button></div></section>
+<section class="panel memory-panel" id="memoryPanel" hidden><div class="panel-head"><div><p class="eyebrow">CONTEXT MEMORY</p><h2>6. The next agent inherits the decision</h2></div><span class="status live">MEMORY FOUND</span></div><div class="memory-callout"><strong>Previous approved deprecation found.</strong><p>ContextForge remembers that <code>legacy_segment</code> was retained as a compatibility alias while downstream consumers migrate to <code>customer_tier</code>.</p></div><div class="memory-grid"><article><small>FOLLOW-UP REQUEST</small><strong>Remove legacy_segment now.</strong></article><article><small>INHERITED CONTEXT</small><strong>3 downstream consumers still require verification.</strong></article><article><small>SAFETY DECISION</small><strong>BLOCK DESTRUCTIVE REMOVAL</strong></article></div><p class="truth-note">Browser demo memory uses local storage. The public repo also contains the live DataHub MCP adapter; production write-back requires configured DataHub credentials and an approved metadata mutation.</p></section>
+<section class="architecture" id="architecture"><p class="eyebrow">WHY THIS MATTERS</p><h2>Your coding agent knows code. ContextForge teaches it your data system.</h2><p class="lede">A syntactically valid change can still break dashboards, violate governance rules, surprise owners, or silently change business logic. ContextForge turns metadata into operational constraints and human-review boundaries.</p><div class="grid3"><article><h3>Know the blast radius</h3><p>Lineage exposes downstream dependencies before code is generated.</p></article><article><h3>Carry governance into code</h3><p>Ownership, PII and trust signals become generation constraints and review gates.</p></article><article><h3>Make AI decisions auditable</h3><p>Code, tests, policy and review evidence stay linked instead of disappearing inside a prompt.</p></article></div></section>
+<section class="expansion" id="expansion"><p class="eyebrow">ONE PATTERN, MORE THAN DATA</p><h2>A context-aware change engine.</h2><div class="grid3"><article><span class="vertical">DATA</span><h3>Data engineering</h3><p>Schema, lineage, ownership, governance and usage become safe code-generation context.</p></article><article><span class="vertical">CYBER</span><h3>Cybersecurity</h3><p>The same pattern can gate IAM, detection, dependency and infrastructure changes by blast radius and authority.</p></article><article><span class="vertical">GAMING</span><h3>Live game systems</h3><p>Player-data schemas, telemetry, economy tables and backend changes can inherit dependency context before deployment.</p></article></div><p class="truth-note">Data engineering is the hackathon proving ground. Cyber and gaming are architecture expansion paths, not claimed integrations in this demo.</p></section>
+</main><footer>Apache-2.0 hackathon project • Clean-room implementation • No proprietary GHOSBC source included</footer>
+<div class="guide-dock" id="guideDock" hidden aria-live="polite"><div class="guide-copy"><div class="guide-meta"><span class="guide-dot"></span><strong>Judge Mode</strong><span id="guideStepLabel">Step 1</span></div><p id="guideText">Ready.</p></div><div class="guide-controls"><button id="guideBack" class="secondary">Back</button><button id="guideNext" class="primary compact">Next</button><button id="guideVoice" class="icon-btn" aria-pressed="false" title="Toggle voice">🔇</button><button id="guideClose" class="icon-btn" title="Close guide">×</button></div></div><script src="app.js"></script></body></html>
