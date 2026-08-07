@@ -1,0 +1,17 @@
+{
+  "tool": "save_document",
+  "arguments": {
+    "document_type": "Decision",
+    "title": "ContextForge decision — customers",
+    "content": "# ContextForge approved change decision\n\n## Request\nDeprecate customers.legacy_segment and migrate downstream analytics to customer_tier.\n\n## Target\n`urn:li:dataset:(urn:li:dataPlatform:snowflake,commerce.public.customers,PROD)`\n\n## DataHub evidence used\n- Owner: data-platform\n- Governance: PII, Tier1\n- Downstream assets: stg_customers, dim_customers, marketing_audience\n- Observed query patterns: 2\n\n## Decision\nThe compatibility migration was reviewed and explicitly approved for pull-request readiness. ContextForge did not auto-merge or execute the data change.\n\n## Context memory\nPersist this Decision so later DataHub-connected agents can inherit the rationale.",
+    "topics": [
+      "ContextForge",
+      "Data migration",
+      "AI code generation"
+    ],
+    "related_assets": [
+      "urn:li:dataset:(urn:li:dataPlatform:snowflake,commerce.public.customers,PROD)"
+    ]
+  },
+  "note": "Example payload only. A live write requires explicit --approve --write-back and configured DataHub credentials/permissions."
+}
