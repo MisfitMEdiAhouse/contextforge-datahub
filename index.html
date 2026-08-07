@@ -25,20 +25,7 @@
     <div><strong>3</strong><span>generated artifacts</span></div>
     <div><strong>1</strong><span>approval gate</span></div>
   </div>
-</section>
-
-<section class="guide-panel" id="guidePanel" aria-live="polite">
-  <div class="guide-head">
-    <div><span class="guide-dot"></span><strong>ContextForge Guide Agent</strong><small>Context-aware demo walkthrough</small></div>
-    <span id="guideState" class="status live">READY</span>
-  </div>
-  <p id="guideText">Want the product to explain itself? Start the guided demo and I’ll walk through the request, DataHub evidence, generated artifacts, risk gate and final run report.</p>
-  <div class="guide-actions">
-    <button id="guideStart" class="primary compact">Start guided demo</button>
-    <button id="guideNext" class="secondary" disabled>Next</button>
-    <button id="guideVoice" class="secondary" aria-pressed="true">Voice: on</button>
-  </div>
-  <small class="guide-note">Guide narration is deterministic and state-aware for this hackathon demo; it does not call an external LLM.</small>
+  <button id="guideStart" class="primary hero-cta">Start guided demo</button>
 </section>
 
 <section class="workspace">
@@ -88,7 +75,7 @@
   <div class="report-actions"><button id="downloadReport" class="primary compact">Download run report</button></div>
 </section>
 
-<section class="architecture">
+<section class="architecture" id="architecture">
   <h2>Why this is different</h2>
   <div class="grid3">
     <article><h3>Context before code</h3><p>Reads schema, lineage, ownership, tags and query patterns before generation instead of guessing from a prompt.</p></article>
@@ -98,6 +85,19 @@
 </section>
 </main>
 <footer>Apache-2.0 hackathon project • Clean-room implementation • No proprietary GHOSBC source included</footer>
+
+<div class="guide-dock" id="guideDock" hidden aria-live="polite">
+  <div class="guide-copy">
+    <div class="guide-meta"><span class="guide-dot"></span><strong>Guide Agent</strong><span id="guideStepLabel">Step 1 of 6</span></div>
+    <p id="guideText">Ready.</p>
+  </div>
+  <div class="guide-controls">
+    <button id="guideBack" class="secondary">Back</button>
+    <button id="guideNext" class="primary compact">Next</button>
+    <button id="guideVoice" class="icon-btn" aria-pressed="false" title="Toggle voice">🔇</button>
+    <button id="guideClose" class="icon-btn" title="Close guide">×</button>
+  </div>
+</div>
 <script src="app.js"></script>
 </body>
 </html>
