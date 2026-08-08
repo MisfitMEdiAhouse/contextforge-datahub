@@ -57,11 +57,12 @@ jobs:
           voice_dir.mkdir(parents=True, exist_ok=True)
           steps = json.loads((root / 'guide-text.json').read_text())
 
-          # Stable neural voice; deliberately a little slower than default so judges
-          # can read the UI while hearing the exact Judge Mode narration.
-          VOICE = 'en-US-GuyNeural'
-          RATE = '-8%'
-          PITCH = '-2Hz'
+          # Female neural voice to match the live app's female narration character.
+          # The website itself uses the device/browser speechSynthesis voice, so the exact
+          # voice asset varies by device; this keeps gender, pace, and tone consistent.
+          VOICE = 'en-US-JennyNeural'
+          RATE = '-6%'
+          PITCH = '+0Hz'
 
           def speech_text(text: str) -> str:
               # Pronunciation-only cleanup. The on-screen/live text remains untouched.
@@ -97,6 +98,7 @@ jobs:
                       'text': item['text'],
                       'file': str(out),
                       'duration_s': duration,
+                      'voice': VOICE,
                   })
                   print(f"step {item['step']:02d}: {duration:.2f}s")
               (root / 'audio-meta.json').write_text(json.dumps(meta, indent=2))
@@ -117,7 +119,7 @@ jobs:
           root = pathlib.Path('artifacts')
           timeline = json.loads((root / 'timeline.json').read_text())
           video = root / 'contextforge-demo-audio.webm'
-          out = root / 'ContextForge-DataHub-Hackathon-Demo-CURRENT-WITH-AUDIO.mp4'
+          out = root / 'ContextForge-DataHub-Hackathon-Demo-CURRENT-FEMALE-VOICE.mp4'
 
           cmd = ['ffmpeg', '-y', '-i', str(video)]
           for item in timeline:
@@ -153,7 +155,7 @@ jobs:
 
       - name: Verify video, audio, and hackathon duration
         run: |
-          FILE=artifacts/ContextForge-DataHub-Hackathon-Demo-CURRENT-WITH-AUDIO.mp4
+          FILE=artifacts/ContextForge-DataHub-Hackathon-Demo-CURRENT-FEMALE-VOICE.mp4
           ffprobe -v error -show_streams -show_format "$FILE"
           DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$FILE")
           AUDIO_STREAMS=$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$FILE" | wc -l)
@@ -173,9 +175,9 @@ jobs:
       - name: Upload final current demo with audio
         uses: actions/upload-artifact@v4
         with:
-          name: contextforge-current-demo-with-audio
+          name: contextforge-current-demo-female-voice
           path: |
-            artifacts/ContextForge-DataHub-Hackathon-Demo-CURRENT-WITH-AUDIO.mp4
+            artifacts/ContextForge-DataHub-Hackathon-Demo-CURRENT-FEMALE-VOICE.mp4
             artifacts/guide-text.json
             artifacts/audio-meta.json
             artifacts/timeline.json
