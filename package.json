@@ -1,0 +1,8 @@
+{
+  "name": "contextforge-datahub",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "rm -rf dist && mkdir -p dist/fixtures dist/assets && cp index.html styles.css final-polish.css app.js judge-mode-fix.js voice-fix.js dist/ && cp fixtures/datahub-context.json dist/fixtures/ && cp assets/misfit-logo.webp dist/assets/"
+  }
+}
