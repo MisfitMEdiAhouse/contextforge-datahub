@@ -1,6 +1,6 @@
 # ContextForge — Devpost Submission Packet
 
-Use this file as the canonical claim-safe submission copy for **Build with DataHub: The Agent Hackathon**.
+Canonical claim-safe submission copy for **Build with DataHub: The Agent Hackathon**.
 
 ## Project name
 
@@ -21,6 +21,10 @@ ContextForge
 
 Do not select Agent Context Kit, DataHub Skills, or Analytics Agent for this build.
 
+## Built With tags
+
+`datahub` · `mcp` · `python` · `javascript` · `html` · `css` · `dbt` · `vercel`
+
 ## Live project
 
 https://contextforge-datahub-app.vercel.app/
@@ -31,15 +35,29 @@ https://github.com/MisfitMEdiAhouse/contextforge-datahub
 
 ## Demo video
 
-**PUBLIC VIDEO URL — add after final <3-minute recording is uploaded to YouTube or Vimeo.**
+**PUBLIC VIDEO URL — add after the final <3-minute recording is uploaded to YouTube or Vimeo.**
+
+Suggested public video title:
+
+**ContextForge — DataHub Agent Hackathon Demo**
+
+Suggested public video description:
+
+> ContextForge checks what a data change could break before an AI coding agent writes or ships it. It uses DataHub schema, lineage, ownership, governance, and usage context to generate code + tests, enforce a human approval boundary, and preserve approved decisions as reusable DataHub context. Built by Misfit Mediahouse for Build with DataHub: The Agent Hackathon. Live demo and public source links are included in the Devpost submission.
 
 ## Short description
 
 ContextForge turns DataHub metadata into a control layer for AI-assisted data code generation. Before generating a schema migration, it checks schema, lineage, ownership, governance, and observed usage to understand what the change could break. It then generates code, tests, and an evidence-linked PR summary, requires human approval for risky changes, and provides an explicitly authorized DataHub MCP `save_document` path for preserving the approved decision as reusable context for future agents.
 
-## What it does
+# Story
 
-Prompt-only coding agents can generate syntactically valid changes that are operationally dangerous because they do not know the organization around the code: which dashboards depend on a field, who owns the dataset, whether the field is PII, or how production queries actually use it.
+## Inspiration
+
+AI coding agents are getting very good at producing syntactically valid code, but a data change can be technically valid and still be operationally dangerous. A simple rename can break dashboards, violate PII controls, surprise dataset owners, or silently alter downstream business logic.
+
+The missing input is not another prompt. It is organizational context: what exists, what depends on it, who owns it, what rules govern it, and how it is actually used. DataHub already contains that context. ContextForge asks what happens if we turn that metadata into an active decision and control layer *before* an AI coding agent writes or ships the change.
+
+## What it does
 
 ContextForge inserts a metadata-aware decision layer before code generation:
 
@@ -57,13 +75,13 @@ For each run, ContextForge turns five DataHub context signals into three reviewa
 - schema documentation/tests
 - evidence-linked PR summary
 
-High-impact changes stop at a human approval boundary. The AI can prepare the change, but it cannot approve a risky production change by itself.
+High-impact changes stop at a human approval boundary. **The AI can prepare the change, but it cannot approve a risky production change by itself.**
 
 After approval, the public CLI can persist the decision back to DataHub through the official MCP `save_document` tool when the operator explicitly supplies `--approve --write-back`. That creates a reusable Decision document linked to the affected asset so the next DataHub-connected agent can inherit the prior rationale instead of reconstructing it from scratch.
 
 ## How we built it
 
-ContextForge has two intentionally separated execution surfaces:
+ContextForge has two intentionally separated execution surfaces.
 
 ### Judge-ready browser demo
 
@@ -87,7 +105,7 @@ The write-back path is deliberately harder to trigger than the read path. `--wri
 
 The public repository includes the browser source, CLI, fixture, examples, write-back contract, reproducible build configuration, and Apache 2.0 license. No DataHub credentials are stored in browser code or in the repository.
 
-## Why DataHub matters
+### Why DataHub matters
 
 Without DataHub, a coding agent mostly sees the requested code change. With DataHub, it can reason over the surrounding data system before generating anything:
 
@@ -114,7 +132,7 @@ We deliberately separated the deterministic browser demo from live DataHub mutat
 
 A second challenge was making the demonstration self-explanatory. Judge Mode now keeps the public action as `NEXT`, performs the necessary underlying UI actions automatically, follows the narrated section, and finishes with a concise before/after business takeaway.
 
-## Accomplishments we are proud of
+## Accomplishments that we're proud of
 
 - Uses five meaningful DataHub context surfaces before code generation.
 - Generates three concrete, reviewable engineering artifacts.
@@ -128,17 +146,17 @@ A second challenge was making the demonstration self-explanatory. Judge Mode now
 
 ## What we learned
 
-The most important insight is that better prompting is not enough for production AI coding agents. The missing ingredient is organizational context plus authorization boundaries.
+Better prompting is not enough for production AI coding agents. The missing ingredient is organizational context plus authorization boundaries.
 
 Schema gives an agent syntax-level truth, but lineage, ownership, governance, and usage turn that into operational truth. DataHub is especially powerful because the same context layer can both inform a decision before generation and preserve the approved outcome afterward.
 
-## What's next
+## What's next for ContextForge
 
 The next product step is to expose the ContextForge decision/control contract directly to coding-agent workflows so they can request metadata-aware authorization before generating or executing risky data changes.
 
 Additional governed-change domains such as cybersecurity infrastructure and live game backends are architecture expansion paths, not current integrations in this hackathon build.
 
-## Testing instructions
+# Testing instructions
 
 1. Open the live project URL. No login is required.
 2. Turn device/browser volume on.
@@ -163,7 +181,7 @@ python src/contextforge.py \
   --out generated
 ```
 
-## Claim boundaries
+# Claim boundaries
 
 - The browser demo uses fixture/local state; it does not claim a live DataHub mutation.
 - The public CLI contains the real MCP read and explicitly approved `save_document` write-back path.
