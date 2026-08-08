@@ -25,10 +25,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Playwright
+      - name: Install Playwright and video tools
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
 
       - name: Record live Judge Mode
         run: node tools/record-demo.mjs
