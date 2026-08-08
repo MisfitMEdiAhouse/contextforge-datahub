@@ -35,13 +35,13 @@ https://github.com/MisfitMEdiAhouse/contextforge-datahub
 
 ## Demo video
 
-**PUBLIC VIDEO URL — add after the final <3-minute recording is uploaded to YouTube or Vimeo.**
+https://youtu.be/L2vr9BbihpE
 
-Suggested public video title:
+Public video title:
 
 **ContextForge — DataHub Agent Hackathon Demo**
 
-Suggested public video description:
+Public video description:
 
 > ContextForge checks what a data change could break before an AI coding agent writes or ships it. It uses DataHub schema, lineage, ownership, governance, and usage context to generate code + tests, enforce a human approval boundary, and preserve approved decisions as reusable DataHub context. Built by Misfit Mediahouse for Build with DataHub: The Agent Hackathon. Live demo and public source links are included in the Devpost submission.
 
@@ -188,5 +188,5 @@ python src/contextforge.py \
 - ContextForge does not auto-merge generated production changes.
 - Cybersecurity and gaming are architecture expansion paths only.
 - ContextForge exposes a metadata-aware decision and control pattern that coding agents can use before generating or executing changes; it does not claim to tune every external AI agent.
-- No proprietary GHOSBC source is included in the hackathon project.
+- No private/proprietary source is included in the hackathon project.
 - The project is a clean-room hackathon implementation built for this submission.
