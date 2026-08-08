@@ -19,6 +19,7 @@ const context = await browser.newContext({
 
 const page = await context.newPage();
 const video = page.video();
+if (!video) throw new Error('Playwright did not create a recording.');
 
 await page.goto(LIVE_URL, { waitUntil: 'networkidle', timeout: 60_000 });
 await page.waitForSelector('#guideStartBottom', { state: 'attached' });
@@ -62,10 +63,13 @@ for (let step = 1; step <= 14; step++) {
 }
 
 await page.waitForTimeout(3600);
+
+// Start the save while the context is still alive. Playwright resolves it once the
+// page closes and the recording is finalized.
+const savePromise = video.saveAs(`${OUT_DIR}/contextforge-demo.webm`);
 await page.close();
+await savePromise;
 await context.close();
 await browser.close();
 
-if (!video) throw new Error('Playwright did not create a recording.');
-await video.saveAs(`${OUT_DIR}/contextforge-demo.webm`);
 console.log('Saved artifacts/contextforge-demo.webm');
