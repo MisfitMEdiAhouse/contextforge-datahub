@@ -1,0 +1,59 @@
+name: Record ContextForge demo
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/record-demo.yml'
+      - 'tools/record-demo.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  record-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Record live Judge Mode
+        run: node tools/record-demo.mjs
+
+      - name: Convert to MP4 and enforce duration
+        run: |
+          ffmpeg -y -i artifacts/contextforge-demo.webm \
+            -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p \
+            -movflags +faststart -an artifacts/contextforge-demo.mp4
+          DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 artifacts/contextforge-demo.mp4)
+          echo "Demo duration: ${DURATION}s"
+          python - "$DURATION" <<'PY'
+          import sys
+          duration = float(sys.argv[1])
+          if duration >= 175:
+              raise SystemExit(f"Demo is too long: {duration:.2f}s")
+          print(f"Duration gate passed: {duration:.2f}s")
+          PY
+
+      - name: Upload demo video
+        uses: actions/upload-artifact@v4
+        with:
+          name: contextforge-demo-video
+          path: |
+            artifacts/contextforge-demo.mp4
+            artifacts/contextforge-demo.webm
+          if-no-files-found: error
+          retention-days: 7
