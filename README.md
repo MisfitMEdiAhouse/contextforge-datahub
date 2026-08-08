@@ -2,6 +2,9 @@
 
 **Metadata-aware code generation grounded in DataHub context.**
 
+**Live demo:** https://contextforge-datahub-app.vercel.app/  
+**Judge Mode:** use **Start judge-ready guided demo** at the top or bottom of the app; both launch the same guided flow.
+
 ContextForge reads DataHub schema, lineage, ownership, governance signals, and query patterns **before** generating production-useful data artifacts. Instead of treating code generation as autocomplete, it treats every change as an impact decision:
 
 **discover context → assess blast radius → generate code + tests → require human approval → preserve the approved decision as shared DataHub context**
@@ -35,7 +38,7 @@ The official DataHub MCP server keeps mutation tools disabled by default. Contex
 
 ## Quick demo
 
-Open `index.html` or visit the hosted demo. The browser demo uses a bundled DataHub-shaped context snapshot so judges can explore the workflow instantly without credentials.
+Open `index.html` or visit the live demo linked above. The browser demo uses a bundled DataHub-shaped context snapshot so judges can explore the workflow instantly without credentials.
 
 The browser intentionally **does not fake a DataHub mutation**. It uses local browser memory to demonstrate the experience, while the CLI below contains the actual MCP write-back implementation.
 
