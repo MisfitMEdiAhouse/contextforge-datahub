@@ -1,0 +1,183 @@
+name: Record ContextForge demo with audio
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/record-demo-audio.yml'
+      - 'tools/extract-guide-text.mjs'
+      - 'tools/record-demo-audio.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  record-demo-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install browser, ffmpeg, and neural TTS
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip edge-tts
+
+      - name: Read exact narration from current live production
+        run: node tools/extract-guide-text.mjs
+
+      - name: Generate natural-paced narration for exact live steps
+        run: |
+          python - <<'PY'
+          import asyncio
+          import json
+          import pathlib
+          import re
+          import subprocess
+          import edge_tts
+
+          root = pathlib.Path('artifacts')
+          voice_dir = root / 'voice'
+          voice_dir.mkdir(parents=True, exist_ok=True)
+          steps = json.loads((root / 'guide-text.json').read_text())
+
+          # Stable neural voice; deliberately a little slower than default so judges
+          # can read the UI while hearing the exact Judge Mode narration.
+          VOICE = 'en-US-GuyNeural'
+          RATE = '-8%'
+          PITCH = '-2Hz'
+
+          def speech_text(text: str) -> str:
+              # Pronunciation-only cleanup. The on-screen/live text remains untouched.
+              replacements = [
+                  (r'\bAI\b', 'A I'),
+                  (r'\bPII\b', 'P I I'),
+                  (r'\bMCP\b', 'M C P'),
+                  (r'\bdbt\b', 'D B T'),
+                  (r'\bTier1\b', 'Tier one'),
+                  (r'save_document', 'save document'),
+              ]
+              for pattern, value in replacements:
+                  text = re.sub(pattern, value, text)
+              return text
+
+          async def main():
+              meta = []
+              for item in steps:
+                  out = voice_dir / f"step-{item['step']:02d}.mp3"
+                  communicate = edge_tts.Communicate(
+                      speech_text(item['text']),
+                      VOICE,
+                      rate=RATE,
+                      pitch=PITCH,
+                  )
+                  await communicate.save(str(out))
+                  duration = float(subprocess.check_output([
+                      'ffprobe', '-v', 'error', '-show_entries', 'format=duration',
+                      '-of', 'csv=p=0', str(out)
+                  ], text=True).strip())
+                  meta.append({
+                      'step': item['step'],
+                      'text': item['text'],
+                      'file': str(out),
+                      'duration_s': duration,
+                  })
+                  print(f"step {item['step']:02d}: {duration:.2f}s")
+              (root / 'audio-meta.json').write_text(json.dumps(meta, indent=2))
+
+          asyncio.run(main())
+          PY
+
+      - name: Record the actual current live Judge Mode at narration pace
+        run: node tools/record-demo-audio.mjs
+
+      - name: Mux synchronized narration onto the live browser recording
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+
+          root = pathlib.Path('artifacts')
+          timeline = json.loads((root / 'timeline.json').read_text())
+          video = root / 'contextforge-demo-audio.webm'
+          out = root / 'ContextForge-DataHub-Hackathon-Demo-CURRENT-WITH-AUDIO.mp4'
+
+          cmd = ['ffmpeg', '-y', '-i', str(video)]
+          for item in timeline:
+              cmd += ['-i', item['file']]
+
+          filters = []
+          labels = []
+          for idx, item in enumerate(timeline, start=1):
+              delay = max(0, int(round(item['start_ms'])))
+              label = f'a{idx}'
+              filters.append(
+                  f'[{idx}:a]aresample=48000,adelay={delay}:all=1[{label}]'
+              )
+              labels.append(f'[{label}]')
+
+          filters.append(
+              ''.join(labels) +
+              f'amix=inputs={len(labels)}:duration=longest:normalize=0,'
+              'loudnorm=I=-16:TP=-1.5:LRA=11[aout]'
+          )
+
+          cmd += [
+              '-filter_complex', ';'.join(filters),
+              '-map', '0:v:0', '-map', '[aout]',
+              '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
+              '-pix_fmt', 'yuv420p',
+              '-c:a', 'aac', '-b:a', '160k', '-ar', '48000',
+              '-movflags', '+faststart', '-shortest', str(out)
+          ]
+          subprocess.run(cmd, check=True)
+          print(out)
+          PY
+
+      - name: Verify video, audio, and hackathon duration
+        run: |
+          FILE=artifacts/ContextForge-DataHub-Hackathon-Demo-CURRENT-WITH-AUDIO.mp4
+          ffprobe -v error -show_streams -show_format "$FILE"
+          DURATION=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$FILE")
+          AUDIO_STREAMS=$(ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$FILE" | wc -l)
+          echo "Final duration: ${DURATION}s"
+          echo "Audio streams: ${AUDIO_STREAMS}"
+          python - "$DURATION" "$AUDIO_STREAMS" <<'PY'
+          import sys
+          duration = float(sys.argv[1])
+          audio_streams = int(sys.argv[2])
+          if duration >= 175:
+              raise SystemExit(f'Demo too long: {duration:.2f}s')
+          if audio_streams < 1:
+              raise SystemExit('Final demo has no audio stream')
+          print(f'PASS: {duration:.2f}s with audio')
+          PY
+
+      - name: Upload final current demo with audio
+        uses: actions/upload-artifact@v4
+        with:
+          name: contextforge-current-demo-with-audio
+          path: |
+            artifacts/ContextForge-DataHub-Hackathon-Demo-CURRENT-WITH-AUDIO.mp4
+            artifacts/guide-text.json
+            artifacts/audio-meta.json
+            artifacts/timeline.json
+          if-no-files-found: error
+          retention-days: 7
