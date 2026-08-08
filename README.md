@@ -11,7 +11,7 @@ ContextForge reads DataHub schema, lineage, ownership, governance signals, and q
 
 > Hackathon lane: **Metadata-Aware Code Generation & Development**  
 > License: **Apache-2.0**  
-> Clean-room note: this public project contains no proprietary GHOSBC/Misfit private source or algorithms.
+> Clean-room hackathon implementation with no private/proprietary source included.
 
 ## What it generates
 
